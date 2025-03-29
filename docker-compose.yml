@@ -12,10 +12,10 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_HOST=db
-      - DATABASE_USER=root
-      - DATABASE_PASSWORD=root
-      - DATABASE_NAME=notarios_db
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_NAME=${DATABASE_NAME}
 
   db:
     image: mysql:5.7
@@ -31,14 +31,29 @@ services:
       # - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql
 
   nginx:
-    image: nginx:latest
     container_name: nginx_server
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
     restart: always
     ports:
       - "8003:80"
+      - 443:443
     volumes:
       - .:/var/www
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/www/certbot:/var/www/certbot
+    image: nginx:latest
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT}
+    entrypoint: >+
+      sh -c 'if [ -f "/etc/nginx/conf.d/nginx-${ENVIRONMENT}.conf" ]; then
+              cp /etc/nginx/conf.d/nginx-${ENVIRONMENT}.conf /etc/nginx/nginx.conf;
+             else
+              echo "Error: /etc/nginx/conf.d/nginx-${ENVIRONMENT}.conf not found!";
+              exit 1;
+             fi &&
+             nginx -g "daemon off;"'
     depends_on:
       - app
 
