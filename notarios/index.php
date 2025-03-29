@@ -42,7 +42,9 @@ body {
        }
 .style5 {font-family: Calibri; font-size: 15px; color: #013334; font-style: italic; }
 -->
-</style></head>
+</style>
+
+</head>
 
 <body>
 <p>&nbsp;</p>

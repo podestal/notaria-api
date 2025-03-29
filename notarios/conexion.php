@@ -1,8 +1,8 @@
 <?php
-$ip      = 'db'; // Use the service name 'db' from docker-compose.yml
-$user    = 'root';
-$contra  = 'root';
-$db_name = 'notarios';
+$ip      = getenv('DATABASE_HOST');
+$user    = getenv('DATABASE_USER'); 
+$contra  = getenv('DATABASE_PASSWORD');
+$db_name = getenv('DATABASE_NAME'); 
 
 // Create connection using MySQLi
 $conn = new mysqli($ip, $user, $contra, $db_name);
