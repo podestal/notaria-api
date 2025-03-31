@@ -1,7 +1,47 @@
-<?
-  session_start();  
+<?php
+session_start();  
+header("Content-Type: application/json");
+
+// ✅ Allow CORS (fixes frontend request issues)
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// ✅ Handle CORS preflight (OPTIONS request)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+$request = $_SERVER['REQUEST_URI'];
+
+// ✅ Use absolute paths
+$loginPath = __DIR__ . "/app/auth/login.php";
+$userPath = __DIR__ . "/users/get_user.php";
+
+switch ($request) {
+    case '/login':
+        if (file_exists($loginPath)) {
+            require $loginPath;
+        } else {
+            echo json_encode(["error" => "Login file not found"]);
+        }
+        break;
+    case '/user':
+        if (file_exists($userPath)) {
+            require $userPath;
+        } else {
+            echo json_encode(["error" => "User file not found"]);
+        }
+        break;
+    default:
+        http_response_code(404);
+        echo json_encode(["error" => "Not Found"]);
+        break;
+}
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -16,7 +56,6 @@
 <link rel="stylesheet" href="css/uniform.default.css" type="text/css" media="screen">
 <link rel="shortcut icon" type="image/jpg" href="imagenes/logocolegio.jpg" />
 <style type="text/css">
-<!--
 body {
 	margin-left: 0px;
 	margin-top: 0px;
@@ -41,7 +80,6 @@ body {
         height:20px;
        }
 .style5 {font-family: Calibri; font-size: 15px; color: #013334; font-style: italic; }
--->
 </style>
 
 </head>
@@ -92,4 +130,4 @@ body {
   </tr>
 </table>
 </body>
-</html>
+</html> -->
