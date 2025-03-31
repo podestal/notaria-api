@@ -16,6 +16,7 @@ services:
       - DATABASE_USER=${DATABASE_USER}
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - DATABASE_NAME=${DATABASE_NAME}
+      - FRONTEND_URL=${FRONTEND_URL}
 
   db:
     image: mysql:5.7

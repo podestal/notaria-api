@@ -3,7 +3,8 @@ session_start();
 header("Content-Type: application/json");
 
 // ✅ Allow CORS (fixes frontend request issues)
-header("Access-Control-Allow-Origin: http://localhost:5173");
+$frontend_url = getenv('FRONTEND_URL');
+header("Access-Control-Allow-Origin: $frontend_url");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
